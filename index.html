@@ -20,8 +20,8 @@
 
     .book {
         position: relative;
-        width: 100%;
-        max-width: 420px;
+        width: 70vh;
+        max-width: 90%;
         aspect-ratio: 3 / 4;
         transform-style: preserve-3d;
     }
@@ -91,7 +91,8 @@
 
     @media (max-width: 600px) {
         .book {
-            max-width: 320px;
+            width: 60vh;
+            max-width: 95%;
         }
     }
 </style>
@@ -135,13 +136,21 @@
 
         if (step === 0) {
             front.style.transform = "rotateY(-160deg)";
-            hint.textContent = "Tik om verder te bladeren";
+            hint.textContent = "";
             step = 1;
         } 
         else if (step === 1) {
             rightPage.style.transform = "rotateY(-180deg)";
-            hint.textContent = "Einde van de kaart";
             step = 2;
+        }
+        else if (step === 2) {
+            rightPage.style.transform = "rotateY(0deg)";
+            step = 3;
+        }
+        else if (step === 3) {
+            front.style.transform = "rotateY(0deg)";
+            hint.textContent = "Tik om te openen";
+            step = 0;
         }
     });
 </script>
