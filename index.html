@@ -41,10 +41,10 @@
         object-fit: cover;
     }
 
-    /* Voorkant */
+    /* Voorkant = linkerpaneel */
     #front {
-        width: 100%;
-        transform-origin: left center;
+        left: 0;
+        transform-origin: right center;
         z-index: 10;
         box-shadow: 0 15px 40px rgba(0,0,0,0.35);
     }
@@ -57,7 +57,7 @@
         box-shadow: 0 5px 20px rgba(0,0,0,0.15);
     }
 
-    /* Rechter binnenpagina (de omslaande pagina) */
+    /* Rechter binnenpagina */
     #rightPage {
         right: 0;
         transform-origin: left center;
@@ -73,7 +73,6 @@
         z-index: 1;
         box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
-
 </style>
 </head>
 
@@ -81,7 +80,7 @@
 
 <div class="book">
 
-    <!-- Voorkant -->
+    <!-- Voorkant (linkerpagina) -->
     <div class="page" id="front">
         <img src="voorkant.jpg">
     </div>
@@ -91,7 +90,7 @@
         <img src="links.jpg">
     </div>
 
-    <!-- Binnenkant rechts (de pagina die omslaat) -->
+    <!-- Binnenkant rechts -->
     <div class="page" id="rightPage">
         <img src="rechts.jpg">
     </div>
@@ -111,9 +110,9 @@
         const rightPage = document.getElementById("rightPage");
 
         if (step === 0) {
-            // Voorkant slaat open
+            // Voorkant slaat van links naar rechts open
             front.style.transition = "1.2s cubic-bezier(.55,.03,.41,1.39)";
-            front.style.transform = "rotateY(-160deg) translateZ(8px) rotateX(3deg)";
+            front.style.transform = "rotateY(160deg) translateZ(8px) rotateX(3deg)";
             step = 1;
         } 
         else if (step === 1) {
@@ -137,4 +136,3 @@
 
 </body>
 </html>
-
