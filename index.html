@@ -18,105 +18,72 @@
         perspective: 1600px;
     }
 
-    #card {
+    #stack {
+        position: relative;
         width: 90%;
         max-width: 420px;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .card {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         transform-origin: left center;
         transition: transform 0.7s ease;
-        background: white;
+        backface-visibility: hidden;
     }
 
-    .single-image img {
+    .card img {
         width: 100%;
         display: block;
     }
 
-    .inside {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-    }
-
-    .inside img {
-        width: 50%;
-        display: block;
+    .flip {
+        transform: rotateY(-180deg);
     }
 
     .hint {
         position: absolute;
         bottom: 20px;
-        text-align: center;
         width: 100%;
+        text-align: center;
         font-size: 15px;
         color: #555;
-        opacity: 1;
-    }
-
-    .hinge-small {
-        transform: rotateY(-90deg);
-    }
-
-    .hinge-wide {
-        transform: rotateY(-120deg);
     }
 </style>
 </head>
 
 <body>
 
-<div id="card">
-    <div id="cardContent" class="single-image">
-        <img src="voorkant.jpg">
-    </div>
+<div id="stack">
+    <div class="card"><img src="voorkant.jpg"></div>
+    <div class="card"><img src="links.jpg"></div>
+    <div class="card"><img src="rechts.jpg"></div>
+    <div class="card"><img src="achter.jpg"></div>
 </div>
 
 <div class="hint">Tik om de kaart om te slaan</div>
 
 <script>
-    const sequence = ["front", "inside", "back", "inside"];
-    let index = 0;
+    const cards = Array.from(document.querySelectorAll(".card"));
 
-    const card = document.getElementById("card");
-    const cardContent = document.getElementById("cardContent");
+    cards.forEach((c, i) => c.style.zIndex = cards.length - i);
 
-    function renderState(state) {
-        if (state === "front") {
-            cardContent.className = "single-image";
-            cardContent.innerHTML = '<img src="voorkant.jpg">';
-        } else if (state === "back") {
-            cardContent.className = "single-image";
-            cardContent.innerHTML = '<img src="achter.jpg">';
-        } else if (state === "inside") {
-            cardContent.className = "inside";
-            cardContent.innerHTML = `
-                <img src="links.jpg">
-                <img src="rechts.jpg">
-            `;
-        }
+    function moveToBack(card) {
+        card.style.transition = "none";
+        card.classList.remove("flip");
+        cards.push(cards.shift());
+        setTimeout(() => {
+            cards.forEach((c, i) => c.style.zIndex = cards.length - i);
+            card.style.transition = "transform 0.7s ease";
+        }, 50);
     }
 
-    renderState(sequence[index]);
-
     document.addEventListener("click", () => {
-        const next = sequence[(index + 1) % sequence.length];
-
-        if (next === "inside") {
-            card.classList.add("hinge-wide");
-        } else {
-            card.classList.add("hinge-small");
-        }
-
-        setTimeout(() => {
-            index = (index + 1) % sequence.length;
-            renderState(sequence[index]);
-        }, 350);
-
-        setTimeout(() => {
-            card.classList.remove("hinge-small", "hinge-wide");
-        }, 700);
+        const topCard = cards[0];
+        topCard.classList.add("flip");
+        setTimeout(() => moveToBack(topCard), 700);
     });
 </script>
 
