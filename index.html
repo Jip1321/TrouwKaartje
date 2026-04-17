@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Trouwkaart Boek</title>
+<title>Trouwkaart</title>
 
 <style>
     body {
@@ -14,123 +13,61 @@
         justify-content: center;
         align-items: center;
         background: #e6e6e6;
-        perspective: 2000px;
         font-family: sans-serif;
         overflow: hidden;
     }
 
-    .book {
-        position: relative;
-        width: min(70vh, 60vw);
+    #card {
+        width: min(70vh, 90vw);
         max-width: 95%;
-        aspect-ratio: 3 / 2;
-        transform-style: preserve-3d;
+        aspect-ratio: 3 / 4;
+        position: relative;
     }
 
-    .page {
+    #card img {
         position: absolute;
-        width: 50%;
-        height: 100%;
-        top: 0;
-        backface-visibility: hidden;
-    }
-
-    .page img {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        opacity: 0;
+        transition: opacity 0.8s ease;
     }
 
-    /* Voorkant = linkerpaneel */
-    #front {
-        left: 0;
-        transform-origin: right center;
-        z-index: 10;
-        box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+    #card img.active {
+        opacity: 1;
     }
 
-    /* Linker binnenpagina */
-    #leftPage {
-        left: 0;
-        transform-origin: right center;
-        z-index: 1;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
-
-    /* Rechter binnenpagina */
-    #rightPage {
-        right: 0;
-        transform-origin: left center;
-        z-index: 2;
-        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-    }
-
-    /* Achterkant van de rechterpagina */
-    #rightBack {
-        right: 0;
-        transform-origin: left center;
-        transform: rotateY(180deg);
-        z-index: 1;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    .hint {
+        position: absolute;
+        bottom: 20px;
+        width: 100%;
+        text-align: center;
+        color: #444;
+        font-size: 16px;
+        pointer-events: none;
     }
 </style>
 </head>
 
 <body>
 
-<div class="book">
-
-    <!-- Voorkant (linkerpagina) -->
-    <div class="page" id="front">
-        <img src="voorkant.jpg">
-    </div>
-
-    <!-- Binnenkant links -->
-    <div class="page" id="leftPage">
-        <img src="links.jpg">
-    </div>
-
-    <!-- Binnenkant rechts -->
-    <div class="page" id="rightPage">
-        <img src="rechts.jpg">
-    </div>
-
-    <!-- Achterkant van de rechterpagina -->
-    <div class="page" id="rightBack">
-        <img src="achter.jpg">
-    </div>
-
+<div id="card">
+    <img src="voorkant.png" class="active">
+    <img src="pagina2.png">
+    <img src="pagina3.png">
+    <img src="pagina4.png">
 </div>
 
+<div class="hint">Tik om verder te gaan</div>
+
 <script>
-    let step = 0;
+    const images = document.querySelectorAll("#card img");
+    let index = 0;
 
     document.addEventListener("click", () => {
-        const front = document.getElementById("front");
-        const rightPage = document.getElementById("rightPage");
-
-        if (step === 0) {
-            // Voorkant slaat van links naar rechts open
-            front.style.transition = "1.2s cubic-bezier(.55,.03,.41,1.39)";
-            front.style.transform = "rotateY(160deg) translateZ(8px) rotateX(3deg)";
-            step = 1;
-        } 
-        else if (step === 1) {
-            // Rechterpagina slaat van rechts naar links
-            rightPage.style.transition = "1.2s cubic-bezier(.55,.03,.41,1.39)";
-            rightPage.style.transform = "rotateY(-180deg) translateZ(8px) rotateX(3deg)";
-            step = 2;
-        }
-        else if (step === 2) {
-            // Rechterpagina terug
-            rightPage.style.transform = "rotateY(0deg)";
-            step = 3;
-        }
-        else if (step === 3) {
-            // Voorkant terug
-            front.style.transform = "rotateY(0deg)";
-            step = 0;
-        }
+        images[index].classList.remove("active");
+        index = (index + 1) % images.length;
+        images[index].classList.add("active");
     });
 </script>
 
