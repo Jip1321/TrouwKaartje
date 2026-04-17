@@ -20,19 +20,18 @@
 
     .book {
         position: relative;
-        width: min(60vh, 50vw);
-        max-width: 90%;
-        aspect-ratio: 3 / 4;
+        width: min(70vh, 60vw);
+        max-width: 95%;
+        aspect-ratio: 3 / 2;
         transform-style: preserve-3d;
     }
 
     .page {
         position: absolute;
-        width: 100%;
+        width: 50%;
         height: 100%;
-        transform-origin: left center;
+        top: 0;
         backface-visibility: hidden;
-        transition: transform 1.2s cubic-bezier(.55,.03,.41,1.39);
     }
 
     .page img {
@@ -41,25 +40,34 @@
         object-fit: cover;
     }
 
-    .hard {
+    #front {
+        width: 100%;
+        transform-origin: left center;
+        z-index: 10;
         box-shadow: 0 15px 40px rgba(0,0,0,0.35);
     }
 
-    .soft {
+    #leftPage {
+        left: 0;
+        transform: translateX(0);
+        transform-origin: right center;
         box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-        border-radius: 2px 8px 8px 2px;
     }
 
-    .back {
+    #rightPage {
+        right: 0;
+        transform: translateX(0);
+        transform-origin: left center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    #rightBack {
+        right: 0;
+        transform-origin: left center;
         transform: rotateY(180deg);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
-    @media (max-width: 600px) {
-        .book {
-            width: 80vw;
-            max-width: 95%;
-        }
-    }
 </style>
 </head>
 
@@ -67,23 +75,19 @@
 
 <div class="book">
 
-    <!-- 1: Voorkant -->
-    <div class="page hard" id="p1">
+    <div class="page" id="front">
         <img src="voorkant.jpg">
     </div>
 
-    <!-- 2: Binnenkant links -->
-    <div class="page soft" id="p2">
+    <div class="page" id="leftPage">
         <img src="links.jpg">
     </div>
 
-    <!-- 3: Binnenkant rechts -->
-    <div class="page soft" id="p3">
+    <div class="page" id="rightPage">
         <img src="rechts.jpg">
     </div>
 
-    <!-- 4: Achterkant -->
-    <div class="page hard back" id="p4">
+    <div class="page" id="rightBack">
         <img src="achter.jpg">
     </div>
 
@@ -93,24 +97,25 @@
     let step = 0;
 
     document.addEventListener("click", () => {
-        const p1 = document.getElementById("p1");
-        const p2 = document.getElementById("p2");
-        const p3 = document.getElementById("p3");
+        const front = document.getElementById("front");
+        const rightPage = document.getElementById("rightPage");
 
         if (step === 0) {
-            p1.style.transform = "rotateY(-160deg) translateZ(10px) rotateX(3deg)";
+            front.style.transition = "1.2s cubic-bezier(.55,.03,.41,1.39)";
+            front.style.transform = "rotateY(-160deg) translateZ(8px) rotateX(3deg)";
             step = 1;
-        }
+        } 
         else if (step === 1) {
-            p3.style.transform = "rotateY(-160deg) translateZ(10px) rotateX(3deg)";
+            rightPage.style.transition = "1.2s cubic-bezier(.55,.03,.41,1.39)";
+            rightPage.style.transform = "rotateY(-180deg) translateZ(8px) rotateX(3deg)";
             step = 2;
         }
         else if (step === 2) {
-            p3.style.transform = "rotateY(0deg)";
+            rightPage.style.transform = "rotateY(0deg)";
             step = 3;
         }
         else if (step === 3) {
-            p1.style.transform = "rotateY(0deg)";
+            front.style.transform = "rotateY(0deg)";
             step = 0;
         }
     });
