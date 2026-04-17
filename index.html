@@ -3,44 +3,67 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digitale Kaart</title>
+<title>Trouwkaart Boek</title>
 
 <style>
     body {
         margin: 0;
-        background: #f2f2f2;
+        height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        background: #e6e6e6;
+        perspective: 2000px;
         font-family: sans-serif;
-        overflow: hidden;
-        perspective: 1600px;
     }
 
-    #stack {
+    .book {
         position: relative;
         width: 90%;
         max-width: 420px;
+        transform-style: preserve-3d;
     }
 
-    .card {
+    .hardcover {
         position: absolute;
-        top: 0;
-        left: 0;
         width: 100%;
         transform-origin: left center;
-        transition: transform 0.7s ease;
         backface-visibility: hidden;
+        transition: transform 1.2s cubic-bezier(.55,.03,.41,1.39);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     }
 
-    .card img {
+    .hardcover img {
         width: 100%;
         display: block;
     }
 
-    .flip {
-        transform: rotateY(-180deg);
+    .hardcover-back {
+        transform: rotateY(180deg);
+    }
+
+    .inner-left,
+    .inner-right,
+    .inner-right-back {
+        position: absolute;
+        width: 100%;
+        transform-origin: left center;
+        backface-visibility: hidden;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+    }
+
+    .inner-left {
+        transform: translateZ(-2px);
+    }
+
+    .inner-right {
+        transform-origin: left center;
+        z-index: 5;
+        transition: transform 1.2s cubic-bezier(.55,.03,.41,1.39);
+    }
+
+    .inner-right-back {
+        transform: rotateY(180deg) translateZ(-2px);
     }
 
     .hint {
@@ -48,42 +71,58 @@
         bottom: 20px;
         width: 100%;
         text-align: center;
-        font-size: 15px;
-        color: #555;
+        color: #444;
+        font-size: 16px;
     }
 </style>
 </head>
 
 <body>
 
-<div id="stack">
-    <div class="card"><img src="voorkant.jpg"></div>
-    <div class="card"><img src="links.jpg"></div>
-    <div class="card"><img src="rechts.jpg"></div>
-    <div class="card"><img src="achter.jpg"></div>
+<div class="book" id="book">
+
+    <div class="hardcover" id="front">
+        <img src="voorkant.jpg">
+    </div>
+
+    <div class="hardcover hardcover-back">
+        <img src="links.jpg">
+    </div>
+
+    <div class="inner-left">
+        <img src="links.jpg">
+    </div>
+
+    <div class="inner-right" id="rightPage">
+        <img src="rechts.jpg">
+    </div>
+
+    <div class="inner-right-back">
+        <img src="achter.jpg">
+    </div>
+
 </div>
 
-<div class="hint">Tik om de kaart om te slaan</div>
+<div class="hint" id="hint">Tik om te openen</div>
 
 <script>
-    const cards = Array.from(document.querySelectorAll(".card"));
-
-    cards.forEach((c, i) => c.style.zIndex = cards.length - i);
-
-    function moveToBack(card) {
-        card.style.transition = "none";
-        card.classList.remove("flip");
-        cards.push(cards.shift());
-        setTimeout(() => {
-            cards.forEach((c, i) => c.style.zIndex = cards.length - i);
-            card.style.transition = "transform 0.7s ease";
-        }, 50);
-    }
+    let step = 0;
 
     document.addEventListener("click", () => {
-        const topCard = cards[0];
-        topCard.classList.add("flip");
-        setTimeout(() => moveToBack(topCard), 700);
+        const front = document.getElementById("front");
+        const rightPage = document.getElementById("rightPage");
+        const hint = document.getElementById("hint");
+
+        if (step === 0) {
+            front.style.transform = "rotateY(-160deg)";
+            hint.textContent = "Tik om verder te bladeren";
+            step = 1;
+        } 
+        else if (step === 1) {
+            rightPage.style.transform = "rotateY(-180deg)";
+            hint.textContent = "Einde van de kaart";
+            step = 2;
+        }
     });
 </script>
 
