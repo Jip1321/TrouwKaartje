@@ -12,9 +12,10 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: 100vh; /* FIX */
         font-family: sans-serif;
         overflow: hidden;
+        perspective: 1000px; 
     }
 
     #card {
@@ -60,7 +61,7 @@
     <img id="cardImage" src="voorkant.jpg" alt="kaart">
 </div>
 
-<div class="hint">Tik om de kaart om te slaan</div>
+<div class="hint">Tik op het scherm om de kaart om te slaan</div>
 
 <script>
     const images = [
@@ -76,15 +77,12 @@
         const card = document.getElementById("card");
         index = (index + 1) % images.length;
 
-        // start flip animatie
         card.classList.add("flip");
 
-        // halverwege de animatie de afbeelding wisselen
         setTimeout(() => {
             document.getElementById("cardImage").src = images[index];
         }, 300);
 
-        // animatie resetten zodat hij opnieuw kan
         setTimeout(() => {
             card.classList.remove("flip");
         }, 600);
