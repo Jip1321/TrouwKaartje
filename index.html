@@ -1,1 +1,75 @@
 
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digitale Kaart</title>
+
+<style>
+    body {
+        margin: 0;
+        background: #f2f2f2;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        font-family: sans-serif;
+    }
+
+    #card {
+        width: 90%;
+        max-width: 400px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        cursor: pointer;
+        transition: transform 0.2s ease;
+    }
+
+    #card:active {
+        transform: scale(0.97);
+    }
+
+    img {
+        width: 100%;
+        display: block;
+    }
+
+    .hint {
+        position: absolute;
+        bottom: 20px;
+        text-align: center;
+        width: 100%;
+        font-size: 14px;
+        color: #555;
+    }
+</style>
+</head>
+
+<body>
+
+<div id="card">
+    <img id="cardImage" src="voorkant.jpg" alt="kaart">
+</div>
+
+<div class="hint">Tik om de kaart om te draaien te gaan</div>
+
+<script>
+    const images = [
+        "voorkant.jpg",
+        "links.jpg",
+        "rechts.jpg",
+        "achter.jpg"
+    ];
+
+    let index = 0;
+
+    document.getElementById("card").addEventListener("click", () => {
+        index = (index + 1) % images.length;
+        document.getElementById("cardImage").src = images[index];
+    });
+</script>
+
+</body>
+</html>
