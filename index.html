@@ -15,7 +15,7 @@
         height: 100vh;
         font-family: sans-serif;
         overflow: hidden;
-        perspective: 1200px;
+        perspective: 1200px; /* zorgt voor 3D diepte */
     }
 
     #card {
@@ -24,7 +24,7 @@
         border-radius: 12px;
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        transform-origin: left center;
+        transform-origin: left center; /* scharnier links */
         transition: transform 0.6s ease;
     }
 
@@ -49,6 +49,7 @@
         to { opacity: 0; }
     }
 
+    /* boek-omslag animatie */
     .hinge {
         transform: rotateY(-90deg);
     }
@@ -66,8 +67,8 @@
 <script>
     const images = [
         "voorkant.jpg",
-        "linker.jpg",
-        "rechter.jpg",
+        "links.jpg",
+        "rechts.jpg",
         "achter.jpg"
     ];
 
@@ -76,13 +77,16 @@
     document.addEventListener("click", () => {
         const card = document.getElementById("card");
 
+        // start boek-omslag animatie
         card.classList.add("hinge");
 
+        // halverwege de animatie de afbeelding wisselen
         setTimeout(() => {
             index = (index + 1) % images.length;
             document.getElementById("cardImage").src = images[index];
         }, 300);
 
+        // kaart weer terugklappen
         setTimeout(() => {
             card.classList.remove("hinge");
         }, 600);
@@ -91,4 +95,3 @@
 
 </body>
 </html>
-
